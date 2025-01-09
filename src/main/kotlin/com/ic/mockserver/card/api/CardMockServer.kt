@@ -9,5 +9,5 @@ class CardMockServer {
 
     @GetMapping("/cards")
     fun getCardMockServerResponseTest(): CardMockResponse =
-        CardMockResponse(message = "CardMockResponseTest")
+        CardMockResponse.ofCardResponseMock()
 }
