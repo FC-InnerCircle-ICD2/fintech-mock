@@ -21,14 +21,18 @@ cd mock-server
 ### Package 구조
 ```text
 └── api
-    ├── request              # 요청 객체를 정의하는 패키지
-    │   ├── CardUsageRequest.kt     # 카드 사용 요청 DTO
-    │   ├── PaymentRequest.kt       # 결제 요청 DTO
-    │   └── TransactionRequest.kt   # 트랜잭션 요청 DTO
-    ├── response             # 응답 객체를 정의하는 패키지
-    │   ├── CardUsageResponse.kt    # 카드 사용 응답 DTO
-    │   ├── PaymentResponse.kt      # 결제 응답 DTO
-    │   └── TransactionResponse.kt  # 트랜잭션 응답 DTO
-    └── ApiController.kt     # Mocking API 엔드포인트를 처리하는 컨트롤러
+    ├── enums                        # 열거형 자료를 정의하는 패키지
+    │   └── CardMockDataSet.kt       # 카드 DataSet   
+    ├── exception                    # 예외를 정의하는 패키지
+    │   ├── CardErrorCode.kt         # 카드 에러 코드 Enum   
+    │   └── CardException.kt         # 카드 인증 및 승인에 대한 에러 클래스   
+    ├── request                      # 요청 객체를 정의하는 패키지
+    │   ├── CardApproveRequest.kt    # 카드 승인 DTO
+    │   └── CardValidateRequest.kt   # 카드 인증 DTO
+    ├── response                     # 응답 객체를 정의하는 패키지
+    │   └── CardMockResponse.kt      # 카드사 응답 DTO
+    ├── service                      # 서비스 객체를 정의하는 패키지
+    │   └── CardMockResponse.kt      # 카드사 서비스    
+    └── CardMockController.kt        # Mocking API 엔드포인트를 처리하는 컨트롤러
 
 ```

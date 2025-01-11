@@ -8,6 +8,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.lang.RuntimeException
+import java.math.BigDecimal
 import kotlin.test.assertEquals
 
 @SpringBootTest
@@ -42,7 +43,7 @@ class MockServiceTest(
 
     @Test
     fun cardApprovePass(){
-        val cardApproveRequest = CardApproveRequest("9876-5432-1098-7654", 7000)
+        val cardApproveRequest = CardApproveRequest("9876-5432-1098-7654", BigDecimal(7000))
         val cardMockResponse = cardMockService.cardApprove(cardApproveRequest)
         val flag = true
         assertEquals(flag, cardMockResponse.isValid)
@@ -50,19 +51,19 @@ class MockServiceTest(
 
     @Test
     fun cardApproveLimit(){
-        val cardApproveRequest = CardApproveRequest("9876-5432-1098-7654", 9000)
+        val cardApproveRequest = CardApproveRequest("9876-5432-1098-7654", BigDecimal(9000))
         assertThrows<RuntimeException>{cardMockService.cardApprove(cardApproveRequest)}
     }
 
     @Test
     fun cardApproveExpired(){
-        val cardApproveRequest = CardApproveRequest("5678-1234-5678-9012", 1)
+        val cardApproveRequest = CardApproveRequest("5678-1234-5678-9012", BigDecimal(1))
         assertThrows<RuntimeException>{cardMockService.cardApprove(cardApproveRequest)}
     }
 
     @Test
     fun cardApproveNotFound(){
-        val cardApproveRequest = CardApproveRequest("1234-5678-9012-9874",  1000)
+        val cardApproveRequest = CardApproveRequest("1234-5678-9012-9874",  BigDecimal(1000))
         assertThrows<RuntimeException>{cardMockService.cardApprove(cardApproveRequest)}
     }
 }

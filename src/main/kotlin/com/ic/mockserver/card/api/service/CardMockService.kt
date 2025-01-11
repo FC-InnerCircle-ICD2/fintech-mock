@@ -3,7 +3,8 @@ package com.ic.mockserver.card.api.service
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import com.ic.mockserver.card.api.enums.CardInfoEnum
+import com.ic.mockserver.card.api.enums.CardMockDataSet
+import com.ic.mockserver.card.api.exception.CardErrorCode
 import com.ic.mockserver.card.api.exception.CardException
 import com.ic.mockserver.card.api.request.CardApproveRequest
 import com.ic.mockserver.card.api.request.CardValidateRequest
@@ -17,21 +18,21 @@ class CardMockService {
     fun cardValidate(
         request: CardValidateRequest
     ):CardMockResponse  {
-        val cardInfo = CardInfoEnum.findByCardNumber(request.cardNumber)
+        val cardInfo = CardMockDataSet.findByCardNumber(request.cardNumber)
         return if (cardInfo != null) {
             //카드 유효 여부
             if (!cardInfo.isValid) {
-                throw CardException("Card ${request.cardNumber} is not valid")
+                throw CardException(CardErrorCode.CARD_NOT_VALID)
             } 
             //카드 만료 여부
             else if(calCardDate(cardInfo)!! < calNowDate()){
-                throw CardException("Card ${cardInfo.expiryDate} is expired")
+                throw CardException(CardErrorCode.CARD_EXPIRED)
             }
             CardMockResponse.from(cardInfo)
         }
         //카드 존재 여부
         else {
-            throw CardException("Card ${request.cardNumber} not found")
+            throw CardException(CardErrorCode.CARD_NOT_FOUND)
         }
     }
 
@@ -39,22 +40,22 @@ class CardMockService {
     fun cardApprove(
         request: CardApproveRequest
     ):CardMockResponse  {
-        val cardInfo = CardInfoEnum.findByCardNumber(request.cardNumber)
+        val cardInfo = CardMockDataSet.findByCardNumber(request.cardNumber)
         return if (cardInfo != null) {
             // 카드 한도 체크
             if (cardInfo.cardLimitAmount - cardInfo.cardUsedAmount < request.amount) {
-                throw CardException("Card ${request.cardNumber} has insufficient limit")
+                throw CardException(CardErrorCode.CARD_LIMIT_EXCEED)
             }
             //카드 만료 여부
             else if(calCardDate(cardInfo)!! < calNowDate()){
-                throw CardException("Card ${cardInfo.expiryDate} is expired")
+                throw CardException(CardErrorCode.CARD_EXPIRED)
             }
             // 승인 처리 성공
             CardMockResponse.from(cardInfo)
         }
         //카드 존재 여부
         else {
-            throw CardException("Card ${request.cardNumber} not found")
+            throw CardException(CardErrorCode.CARD_NOT_FOUND)
         }
     }
 
@@ -65,7 +66,7 @@ class CardMockService {
         return currentDate.year * 12 + currentDate.monthNumber
     }
 
-    fun calCardDate(cardInfo: CardInfoEnum) : Int? {
+    fun calCardDate(cardInfo: CardMockDataSet) : Int? {
         val expiryDateSplit = cardInfo?.expiryDate?.split("/")
 
         // month와 year를 각각 변환, 유효하지 않으면 null

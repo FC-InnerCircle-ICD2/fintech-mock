@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController
 class CardMockController (
     private val cardMockService: CardMockService,
 ){
-    @PostMapping("/cardValidate")
+    @PostMapping("/mock/card/validate")
     fun cardValidate(
         @RequestBody request: CardValidateRequest
     ): CardMockResponse {
         return cardMockService.cardValidate(request)
     }
 
-    @PostMapping("/cardApprove")
+    @PostMapping("/mock/card/approve")
     fun cardApprove(
         @RequestBody request: CardApproveRequest
     ): CardMockResponse {
