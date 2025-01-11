@@ -1,3 +1,5 @@
 package com.ic.mockserver.card.api.exception
 
-class CardException (message: String) : RuntimeException(message)
+class CardException (cardErrorCode: CardErrorCode) : RuntimeException(){
+    public val cardErrorCode: CardErrorCode = cardErrorCode
+}

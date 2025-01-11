@@ -4,6 +4,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import com.ic.mockserver.card.api.enums.CardInfoEnum
+import com.ic.mockserver.card.api.exception.CardErrorCode
 import com.ic.mockserver.card.api.exception.CardException
 import com.ic.mockserver.card.api.request.CardApproveRequest
 import com.ic.mockserver.card.api.request.CardValidateRequest
@@ -21,17 +22,17 @@ class CardMockService {
         return if (cardInfo != null) {
             //카드 유효 여부
             if (!cardInfo.isValid) {
-                throw CardException("Card ${request.cardNumber} is not valid")
+                throw CardException(CardErrorCode.CARD_NOT_VALID)
             } 
             //카드 만료 여부
             else if(calCardDate(cardInfo)!! < calNowDate()){
-                throw CardException("Card ${cardInfo.expiryDate} is expired")
+                throw CardException(CardErrorCode.CARD_EXPIRED)
             }
             CardMockResponse.from(cardInfo)
         }
         //카드 존재 여부
         else {
-            throw CardException("Card ${request.cardNumber} not found")
+            throw CardException(CardErrorCode.CARD_NOT_FOUND)
         }
     }
 
@@ -43,18 +44,18 @@ class CardMockService {
         return if (cardInfo != null) {
             // 카드 한도 체크
             if (cardInfo.cardLimitAmount - cardInfo.cardUsedAmount < request.amount) {
-                throw CardException("Card ${request.cardNumber} has insufficient limit")
+                throw CardException(CardErrorCode.CARD_LIMIT_EXCEED)
             }
             //카드 만료 여부
             else if(calCardDate(cardInfo)!! < calNowDate()){
-                throw CardException("Card ${cardInfo.expiryDate} is expired")
+                throw CardException(CardErrorCode.CARD_EXPIRED)
             }
             // 승인 처리 성공
             CardMockResponse.from(cardInfo)
         }
         //카드 존재 여부
         else {
-            throw CardException("Card ${request.cardNumber} not found")
+            throw CardException(CardErrorCode.CARD_NOT_FOUND)
         }
     }
 
