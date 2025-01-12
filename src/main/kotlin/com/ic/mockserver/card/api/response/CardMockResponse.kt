@@ -1,13 +1,16 @@
 package com.ic.mockserver.card.api.response
 
+import com.ic.mockserver.card.api.enums.CardMockDataSet
 
 data class CardMockResponse(
-    val message: String,
-)  {
-    companion object {
-        fun ofCardResponseMock(): CardMockResponse =
+    val cardNumber: String,
+    val isValid: Boolean
+){
+    companion object{
+        fun from(enum: CardMockDataSet):CardMockResponse =
             CardMockResponse(
-                message = "Mocking Message",
+                cardNumber = enum.cardNumber,
+                isValid = enum.isValid
             )
     }
 }
