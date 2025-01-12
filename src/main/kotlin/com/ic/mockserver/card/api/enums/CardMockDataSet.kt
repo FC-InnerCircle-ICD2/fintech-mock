@@ -24,7 +24,6 @@ enum class CardMockDataSet (
             CARD5.cardNumber to CARD5
         )
 
-        // cardNumber로 CardInfoEnum을 찾는 함수
         fun findByCardNumber(cardNumber: String): CardMockDataSet? {
             return cardInfoMap[cardNumber]  // HashMap에서 찾기
         }
