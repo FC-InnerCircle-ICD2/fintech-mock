@@ -35,8 +35,8 @@ jobs:
       - name: Build with Gradle and save image
         if: ${{ github.event_name == 'push' }}
         run: |
-          ./gradlew mock-server:bootBuildImage
-          docker save mock-server:latest > api-image.tar
+          ./gradlew bootBuildImage
+          docker save mock-server:latest > mock-server-image.tar
 
       - name: Upload image artifact
         if: ${{ github.event_name == 'push' }}
