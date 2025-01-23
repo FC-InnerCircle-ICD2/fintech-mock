@@ -1,0 +1,49 @@
+on:
+  workflow_call:
+jobs:
+  deploy-ec2:
+    name: "🚀deploy"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Download image tag artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: image-tag
+
+      - name: Load Docker image tag
+        id: get-docker-image-tag
+        run: echo "image-tag=$(cat image-tag.txt)" >> $GITHUB_OUTPUT
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4.0.2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Login to Amazon ECR
+        id: login-e.cr
+        uses: aws-actions/amazon-ecr-login@v2.0.1
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.MOCK_SERVER_ECR_REPO_NAME }}
+          IMAGE_TAG:  ${{ steps.get-docker-image-tag.outputs.image-tag }}
+        with:
+          host: ${{ secrets.MOCK_SERVER_EC2_HOST }}
+          username: ${{ secrets.MOCK_SERVER_EC2_USER_NAME }}
+          key: ${{ secrets.MOCK_SERVER_SECRET_KEY }}
+          script_stop: true
+          script: |
+            docker stop payment_application || true
+            docker rm payment_application || true
+            docker pull ${{ env.ECR_REGISTRY }}/${{ envECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+            docker run -d -p 8080:8080 \
+            -e JAVA_TOOL_OPTIONS="-XX:MaxDirectMemorySize=5M -XX:MaxMetaspaceSize=64M -XX:ReservedCodeCacheSize=140M -Xss512K" \
+            --name payment_application \
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
