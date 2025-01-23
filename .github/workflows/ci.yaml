@@ -83,6 +83,9 @@ jobs:
         id: get-timestamp
         run: echo "timestamp=$(date +'%Y-%m-%d-%H-%M')" >> $GITHUB_OUTPUT
 
+      - name: Show Docker images
+        run: docker images
+
       - name: Build, tag, and push the image to Amazon ECR
         id: build-image
         env:
