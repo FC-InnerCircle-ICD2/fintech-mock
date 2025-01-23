@@ -36,7 +36,8 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         run: |
           ./gradlew bootBuildImage
-          docker save mock-server:latest > mock-server-image.tar
+          IMAGE_NAME=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep 'mock-server')
+          docker save $IMAGE_NAME > mock-server-image.tar
 
       - name: Upload image artifact
         if: ${{ github.event_name == 'push' }}
