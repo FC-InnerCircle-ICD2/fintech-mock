@@ -42,6 +42,7 @@ jobs:
           script_stop: true
           script: |
             aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
+            echo "Using image tag: $IMAGE_TAG"
             docker ps -a
             docker pull ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
             docker run -d -p 8082:8082 \
