@@ -42,8 +42,6 @@ jobs:
           script_stop: true
           script: |
             docker ps -a
-            docker ps -q --filter $APP_NAME | xargs -r docker stop
-            docker ps -a -q --filter $APP_NAME | xargs -r docker rm
             docker pull ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
             docker run -d -p 8082:8082 \
             -e JAVA_TOOL_OPTIONS="-XX:MaxDirectMemorySize=5M -XX:MaxMetaspaceSize=64M -XX:ReservedCodeCacheSize=140M -Xss512K" \
