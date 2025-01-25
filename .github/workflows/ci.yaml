@@ -95,7 +95,7 @@ jobs:
         run: |
           docker tag mock-server:0.0.1 $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "$IMAGE_TAG" >> image-tag.txt
+          echo "$IMAGE_TAG" > image-tag.txt  # 덮어쓰기 처리
 
       - name: Upload image tag artifact
         uses: actions/upload-artifact@v4.5.0
