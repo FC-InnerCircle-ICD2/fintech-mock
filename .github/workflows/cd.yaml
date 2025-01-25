@@ -41,6 +41,10 @@ jobs:
           key: ${{ secrets.MOCK_SERVER_SECRET_KEY }}
           script_stop: true
           script: |
+            echo "ECR Registry: $ECR_REGISTRY"
+            echo "ECR Repository: $ECR_REPOSITORY"
+            echo "Image Tag: $IMAGE_TAG"
+            
             aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
             echo "Using image tag: $IMAGE_TAG"
             docker ps -a
