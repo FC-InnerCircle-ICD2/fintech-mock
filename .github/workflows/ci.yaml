@@ -96,10 +96,10 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.MOCK_SERVER_ECR_REPO_NAME }}
           IMAGE_TAG: ${{ steps.get-commit-hash.outputs.commit-hash }}-${{ steps.get-timestamp.outputs.timestamp }}
         run: |
-          docker tag mock-server:0.0.1 $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker tag mock-server:0.0.1 ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
           
-          echo "Saving the tag: $IMAGE_TAG"
+          echo "Saving the tag: ${{ env.IMAGE_TAG }}"
           echo "$IMAGE_TAG" > image-tag.txt
 
       - name: Upload image tag artifact
