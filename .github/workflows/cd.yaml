@@ -41,13 +41,11 @@ jobs:
           key: ${{ secrets.MOCK_SERVER_SECRET_KEY }}
           script_stop: true
           script: |
-            echo "ECR Registry: ${{ env.ECR_REGISTRY }}"
-            echo "ECR Repository: ${{ env.ECR_REPOSITORY }}"
-            echo "Image Tag: ${{ env.IMAGE_TAG }}"
-            echo "ApName: ${{ env.APP_NAME }}"
-            
             aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
             echo "Using image tag: $IMAGE_TAG"
             docker ps -a
             docker pull ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-            docker run -d -p 8082:8082 --name ${{ env.APP_NAME }} ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+            docker run -d -p 8082:8082 \
+            -e JAVA_TOOL_OPTIONS="-XX:MaxDirectMemorySize=5M -XX:MaxMetaspaceSize=64M -XX:ReservedCodeCacheSize=140M -Xss512K" \
+            --name $APP_NAME \
+            $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
