@@ -20,12 +20,20 @@ class CardMockService {
     ):CardMockResponse  {
         val cardInfo = CardMockDataSet.findByCardNumber(request.cardNumber)
         return if (cardInfo != null) {
+            //유효기간 일치 여부
+            if(request.expiryDate != cardInfo.expiryDate){
+                throw CardException(CardErrorCode.CARD_WRONG_EXP_DATE)
+            }
+            //CVC 일치 여부
+            if(request.cvc != cardInfo.cvc){
+                throw CardException(CardErrorCode.CARD_WRONG_CVC)
+            }
             //카드 유효 여부
             if (!cardInfo.isValid) {
                 throw CardException(CardErrorCode.CARD_NOT_VALID)
             } 
             //카드 만료 여부
-            else if(calCardDate(cardInfo)!! < calNowDate()){
+            if(calCardDate(cardInfo)!! < calNowDate()){
                 throw CardException(CardErrorCode.CARD_EXPIRED)
             }
             CardMockResponse.from(cardInfo)
@@ -47,7 +55,7 @@ class CardMockService {
                 throw CardException(CardErrorCode.CARD_LIMIT_EXCEED)
             }
             //카드 만료 여부
-            else if(calCardDate(cardInfo)!! < calNowDate()){
+            if(calCardDate(cardInfo)!! < calNowDate()){
                 throw CardException(CardErrorCode.CARD_EXPIRED)
             }
             // 승인 처리 성공

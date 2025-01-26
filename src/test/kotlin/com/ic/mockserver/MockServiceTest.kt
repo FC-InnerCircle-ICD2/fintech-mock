@@ -17,27 +17,39 @@ class MockServiceTest(
 ) {
     @Test
     fun cardValidatePass(){
-        val cardValidateRequest = CardValidateRequest("1234-5678-9012-3456")
+        val cardValidateRequest = CardValidateRequest("1234-5678-9012-3456", "12/25", "123")
         val cardMockResponse = cardMockService.cardValidate(cardValidateRequest)
         val flag = true
         assertEquals(flag, cardMockResponse.isValid)
     }
 
     @Test
+    fun cardWrongCVC(){
+        val cardValidateRequest = CardValidateRequest("1234-5678-9012-3456", "12/25", "124")
+        assertThrows<RuntimeException>{cardMockService.cardValidate(cardValidateRequest)}
+    }
+
+    @Test
+    fun cardWrongExpDate(){
+        val cardValidateRequest = CardValidateRequest("1234-5678-9012-3456", "11/25", "123")
+        assertThrows<RuntimeException>{cardMockService.cardValidate(cardValidateRequest)}
+    }
+
+    @Test
     fun cardValidateInvalid(){
-        val cardValidateRequest = CardValidateRequest("4567-8923-6378-3982")
+        val cardValidateRequest = CardValidateRequest("4567-8923-6378-3982", "03/28", "654")
         assertThrows<RuntimeException>{cardMockService.cardValidate(cardValidateRequest)}
     }
 
     @Test
     fun cardValidateNotFound(){
-        val cardValidateRequest = CardValidateRequest("1234-5678-9012-9874")
+        val cardValidateRequest = CardValidateRequest("1234-5678-9012-9874", "12/25", "123")
         assertThrows<RuntimeException>{cardMockService.cardValidate(cardValidateRequest)}
     }
 
     @Test
     fun cardValidateExpired(){
-        val cardValidateRequest = CardValidateRequest("5678-1234-5678-9012")
+        val cardValidateRequest = CardValidateRequest("5678-1234-5678-9012", "10/23", "456")
         assertThrows<RuntimeException>{cardMockService.cardValidate(cardValidateRequest)}
     }
 
