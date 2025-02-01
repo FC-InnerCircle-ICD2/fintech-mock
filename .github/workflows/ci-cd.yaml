@@ -2,7 +2,7 @@ name: "🚀CI & CD"
 on:
   push:
     branches:
-      - feat/add-ci-cd
+      - main
 jobs:
   ci:
     name: "🔨"
