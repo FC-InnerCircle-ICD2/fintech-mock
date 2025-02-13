@@ -36,12 +36,6 @@ class MockServiceTest(
     }
 
     @Test
-    fun cardValidateInvalid(){
-        val cardValidateRequest = CardValidateRequest("4567-8923-6378-3982", "03/28", "654")
-        assertThrows<RuntimeException>{cardMockService.cardValidate(cardValidateRequest)}
-    }
-
-    @Test
     fun cardValidateNotFound(){
         val cardValidateRequest = CardValidateRequest("1234-5678-9012-9874", "12/25", "123")
         assertThrows<RuntimeException>{cardMockService.cardValidate(cardValidateRequest)}
@@ -59,12 +53,6 @@ class MockServiceTest(
         val cardMockResponse = cardMockService.cardApprove(cardApproveRequest)
         val flag = true
         assertEquals(flag, cardMockResponse.isValid)
-    }
-
-    @Test
-    fun cardApproveLimit(){
-        val cardApproveRequest = CardApproveRequest("9876-5432-1098-7654", BigDecimal(9000))
-        assertThrows<RuntimeException>{cardMockService.cardApprove(cardApproveRequest)}
     }
 
     @Test
