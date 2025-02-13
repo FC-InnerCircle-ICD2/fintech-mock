@@ -50,10 +50,6 @@ class CardMockService {
     ):CardMockResponse  {
         val cardInfo = CardMockDataSet.findByCardNumber(request.cardNumber)
         return if (cardInfo != null) {
-            // 카드 한도 체크
-            if (cardInfo.cardLimitAmount - cardInfo.cardUsedAmount < request.amount) {
-                throw CardException(CardErrorCode.CARD_LIMIT_EXCEED)
-            }
             //카드 만료 여부
             if(calCardDate(cardInfo)!! < calNowDate()){
                 throw CardException(CardErrorCode.CARD_EXPIRED)
