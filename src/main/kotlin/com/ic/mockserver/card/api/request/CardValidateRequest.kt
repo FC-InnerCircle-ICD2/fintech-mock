@@ -11,5 +11,8 @@ data class CardValidateRequest(
     val expiryDate: String,
 
     @field:NotBlank
-    val cvc: String
+    val cvc: String,
+
+    @field:NotBlank
+    val cardCompany: String
 )
