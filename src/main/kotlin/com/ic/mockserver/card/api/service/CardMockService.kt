@@ -28,6 +28,10 @@ class CardMockService {
             if(request.cvc != cardInfo.cvc){
                 throw CardException(CardErrorCode.CARD_WRONG_CVC)
             }
+            //카드사 일치 여부
+            if(request.cardCompany != cardInfo.cardCompany){
+                throw CardException(CardErrorCode.CARD_WRONG_CVC)
+            }
             //카드 유효 여부
             if (!cardInfo.isValid) {
                 throw CardException(CardErrorCode.CARD_NOT_VALID)

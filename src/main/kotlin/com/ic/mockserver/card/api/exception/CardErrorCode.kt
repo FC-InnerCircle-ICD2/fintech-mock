@@ -8,7 +8,7 @@ enum class CardErrorCode(status: HttpStatus, message: String) {
     CARD_EXPIRED(HttpStatus.BAD_REQUEST, "That card has expired."),
     CARD_WRONG_CVC(HttpStatus.BAD_REQUEST, "The CVC on this card does not match."),
     CARD_WRONG_EXP_DATE(HttpStatus.BAD_REQUEST, "The expiration date does not match the expiration date on this card."),
-    CARD_LIMIT_EXCEED(HttpStatus.BAD_REQUEST, "The limit on that card has been exceeded.");
+    CARD_WRONG_CARD_COMPANY(HttpStatus.BAD_REQUEST, "The card company on this card does not match.");
 
     public val status: HttpStatus = status
     public val message: String = message

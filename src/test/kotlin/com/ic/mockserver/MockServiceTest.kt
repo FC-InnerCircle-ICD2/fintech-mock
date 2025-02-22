@@ -17,7 +17,7 @@ class MockServiceTest(
 ) {
     @Test
     fun cardValidatePass(){
-        val cardValidateRequest = CardValidateRequest("1234-5678-9012-3456", "12/25", "123")
+        val cardValidateRequest = CardValidateRequest("1234-5678-9012-3456", "12/25", "123", "국민")
         val cardMockResponse = cardMockService.cardValidate(cardValidateRequest)
         val flag = true
         assertEquals(flag, cardMockResponse.isValid)
@@ -25,25 +25,31 @@ class MockServiceTest(
 
     @Test
     fun cardWrongCVC(){
-        val cardValidateRequest = CardValidateRequest("1234-5678-9012-3456", "12/25", "124")
+        val cardValidateRequest = CardValidateRequest("1234-5678-9012-3456", "12/25", "124", "국민")
         assertThrows<RuntimeException>{cardMockService.cardValidate(cardValidateRequest)}
     }
 
     @Test
     fun cardWrongExpDate(){
-        val cardValidateRequest = CardValidateRequest("1234-5678-9012-3456", "11/25", "123")
+        val cardValidateRequest = CardValidateRequest("1234-5678-9012-3456", "11/25", "123", "국민")
         assertThrows<RuntimeException>{cardMockService.cardValidate(cardValidateRequest)}
     }
 
     @Test
     fun cardValidateNotFound(){
-        val cardValidateRequest = CardValidateRequest("1234-5678-9012-9874", "12/25", "123")
+        val cardValidateRequest = CardValidateRequest("1234-5678-9012-9874", "12/25", "123", "국민")
         assertThrows<RuntimeException>{cardMockService.cardValidate(cardValidateRequest)}
     }
 
     @Test
     fun cardValidateExpired(){
-        val cardValidateRequest = CardValidateRequest("5678-1234-5678-9012", "10/23", "456")
+        val cardValidateRequest = CardValidateRequest("5678-1234-5678-9012", "10/23", "456", "현대")
+        assertThrows<RuntimeException>{cardMockService.cardValidate(cardValidateRequest)}
+    }
+
+    @Test
+    fun cardWrongCompany(){
+        val cardValidateRequest = CardValidateRequest("5678-1234-5678-9012", "10/23", "456", "수협")
         assertThrows<RuntimeException>{cardMockService.cardValidate(cardValidateRequest)}
     }
 
