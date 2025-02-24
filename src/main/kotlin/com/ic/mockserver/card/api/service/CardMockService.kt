@@ -1,14 +1,14 @@
 package com.ic.mockserver.card.api.service
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import com.ic.mockserver.card.api.enums.CardMockDataSet
 import com.ic.mockserver.card.api.exception.CardErrorCode
 import com.ic.mockserver.card.api.exception.CardException
 import com.ic.mockserver.card.api.request.CardApproveRequest
 import com.ic.mockserver.card.api.request.CardValidateRequest
 import com.ic.mockserver.card.api.response.CardMockResponse
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.springframework.stereotype.Service
 
 @Service
@@ -30,7 +30,7 @@ class CardMockService {
             }
             //카드사 일치 여부
             if(request.cardCompany != cardInfo.cardCompany){
-                throw CardException(CardErrorCode.CARD_WRONG_CVC)
+                throw CardException(CardErrorCode.CARD_WRONG_CARD_COMPANY)
             }
             //카드 유효 여부
             if (!cardInfo.isValid) {
