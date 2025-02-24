@@ -63,7 +63,7 @@ class MockServiceTest(
 
     @Test
     fun cardApproveExpired(){
-        val cardApproveRequest = CardApproveRequest("5678-1234-5678-9012", BigDecimal(1))
+        val cardApproveRequest = CardApproveRequest("3075-2011-7507-4916", BigDecimal(1))
         assertThrows<RuntimeException>{cardMockService.cardApprove(cardApproveRequest)}
     }
 
