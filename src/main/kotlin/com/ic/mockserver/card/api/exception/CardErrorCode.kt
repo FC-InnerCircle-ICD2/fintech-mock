@@ -3,7 +3,7 @@ package com.ic.mockserver.card.api.exception
 import org.springframework.http.HttpStatus
 
 enum class CardErrorCode(status: HttpStatus, message: String) {
-    CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "카드를 찾을 수 없습니다."),
+    CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "발급된 카드가 아닙니다."),
     CARD_NOT_VALID(HttpStatus.BAD_REQUEST, "카드가 유효하지 않습니다."),
     CARD_EXPIRED(HttpStatus.BAD_REQUEST, "카드가 만료되었습니다."),
     CARD_WRONG_CVC(HttpStatus.BAD_REQUEST, "카드의 CVC가 일치하지 않습니다."),
